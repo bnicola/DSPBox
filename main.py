@@ -7,6 +7,7 @@ from fir     import fir_module
 from wavegen import wavegen
 from mixer   import mixer
 from gain    import gain
+from gain_c    import gain_c
 
 def main():
     parser = argparse.ArgumentParser(description='Command Line Argument')
@@ -55,7 +56,7 @@ def main():
     
     wgen = wavegen(instance_name = "lo", 
                    fs            = fsampling, 
-                   freq          = 100e3,
+                   freq          = 1e6,
                    init_phase    = 0, 
                    out_width     = 16)
 
@@ -65,13 +66,13 @@ def main():
                 mixing_signal_width = 16,
                 out_width           = 16)
 
-    in_gain = gain(instance_name = "input",
-                   fs            = fsampling,
-                   gain          = 1.5)
+    #in_gain = gain(instance_name = "input",
+    #               fs            = fsampling,
+    #               gain          = 1.5)
     
-    in_gain2 = gain(instance_name = "input2",
-                   fs            = fsampling,
-                   gain          = 6.0)
+    in_gain2 = gain_c(instance_name = "input2",
+                      fs            = fsampling
+                      )
     
 
     finalise_project()

@@ -19,7 +19,8 @@ class gain:
         self.gain_q_width    = gain_q_width    
         self.out_width       = out_width 
         
-        self.out_width = self.get_required_bits(gain * (2**signal_width))
+        if(gain > 1):
+            self.out_width = self.get_required_bits(gain * (2**(signal_width - 1)))
         d = debug()
         if (d == True):
             self.unit_test()
@@ -140,6 +141,10 @@ class gain:
 
         bits = math.ceil(math.log2(abs(number) + 1)) + 1
         return bits
+    
+    def raise_error(self, error):
+        line_no = traceback.extract_stack()[0].lineno
+        raise ValueError(error + " at " + str(line_no))
 
 
 

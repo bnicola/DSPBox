@@ -8,21 +8,21 @@ class fir_module:
 
     def __init__(self, fir_type, instance_name, fs, fstart, fstop, in_width, coeff_width, numofCoeffs):
         if fir_type is None:
-            self.raise_error(self, "Missing FIR type in module")
+            self.raise_error("Missing FIR type in module")
         if instance_name is None:
-            self.raise_error(self, "Missing instance_name in module")
+            self.raise_error("Missing instance_name in module")
         if fs is None:
-            self.raise_error(self, "Missing fs in module")
+            self.raise_error("Missing fs in module")
         if fstart is None:
-            self.raise_error(self, "Missing fstart in module")
+            self.raise_error("Missing fstart in module")
         if fstop is None:
-            self.raise_error(self, "Missing fstop in module")
+            self.raise_error("Missing fstop in module")
         if in_width is None:
-            self.raise_error(self, "Missing in_width in module")
+            self.raise_error("Missing in_width in module")
         if coeff_width is None:
-            self.raise_error(self, "Missing coeff_width in module")
+            self.raise_error("Missing coeff_width in module")
         if numofCoeffs is None:
-            self.raise_error(self, "Missing numofCoeffs in module")
+            self.raise_error("Missing numofCoeffs in module")
 
         if (fir_type != "LPF" and fir_type != "HPF" and fir_type != "BPF" and fir_type != "BSF"):
             raise ValueError("Please provide an FIR type(LPF, BPF , HPF or BSF)") 
@@ -44,11 +44,11 @@ class fir_module:
              self.start  = 0 
 
         if (fir_type == 'LPF' and self.fstart > 0):
-            self.raise_error(self, "LPF filters should not take an fstart bigger than 0")
+            self.raise_error("LPF filters should not take an fstart bigger than 0")
         if (fir_type == 'BPF' and self.fstart == 0):
-            self.raise_error(self, "BPF filters should not take an fstart equal to 0")
+            self.raise_error("BPF filters should not take an fstart equal to 0")
         if (fir_type == 'HPF' and self.fstart <= 0):
-            self.raise_error(self, "HPF filters should not take an fstart equal to 0 or -1")
+            self.raise_error("HPF filters should not take an fstart equal to 0 or -1")
         
         self.generate()
         add_file_to_list("fir_" + self.instance_name + ".v")
@@ -282,6 +282,10 @@ class fir_module:
             f.write("#Run for 130 ns\n")
             f.write("run " + str(time + 5000) + "\n")
             f.write("wave zoom full\n")
+
+    def raise_error(self, error):
+        line_no = traceback.extract_stack()[0].lineno
+        raise ValueError(error + " at " + str(line_no))
 
     
 

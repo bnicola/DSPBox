@@ -159,6 +159,10 @@ class mixer:
             f.write("run 36000\n")
             f.write("wave zoom full\n")
 
+    def raise_error(self, error):
+        line_no = traceback.extract_stack()[0].lineno
+        raise ValueError(error + " at " + str(line_no))
+
 
     
 

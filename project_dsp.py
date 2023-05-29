@@ -84,6 +84,3 @@ def str_to_bool(value):
     else:
         raise argparse.ArgumentTypeError('Boolean value expected.')
     
-def raise_error(self, error):
-        line_no = traceback.extract_stack()[0].linno
-        raise ValueError(error + " at " + str(line_no))
