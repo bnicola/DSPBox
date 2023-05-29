@@ -3,6 +3,9 @@ import os
 import shutil
 import argparse
 
+RED = '\033[91m'
+RESET = '\033[0m'
+
 project_name = ""
 debugging = False
 file_list = []
@@ -80,3 +83,7 @@ def str_to_bool(value):
         return False
     else:
         raise argparse.ArgumentTypeError('Boolean value expected.')
+    
+def raise_error(self, error):
+        line_no = traceback.extract_stack()[0].linno
+        raise ValueError(error + " at " + str(line_no))

@@ -26,39 +26,52 @@ def main():
     print("Main debugging = " + str(debugging))
     # ------------------------------------------------------------------------------------------------
     fsampling = 100e6
-    bpf = fir_module(fir_type = "BPF",
+    bpf = fir_module(fir_type      = "BPF",
                      instance_name = "bpf", 
-                     fs = fsampling, 
-                     fstart = 2e6, 
-                     fstop = 5e6, 
-                     in_width = 16, 
-                     coeff_width = 21, 
-                     numofCoeffs = 127)
+                     fs            = fsampling, 
+                     fstart        = 4e6, 
+                     fstop         = 7e6, 
+                     in_width      = 16, 
+                     coeff_width   = 21, 
+                     numofCoeffs   = 127)
 
-    bpf = fir_module(fir_type = "LPF",
+    bpf = fir_module(fir_type      = "LPF",
                      instance_name = "lpf", 
-                     fs = fsampling, 
-                     fstart = 2e6, 
-                     fstop = 7e6, 
-                     in_width = 16, 
-                     coeff_width = 21, 
-                     numofCoeffs = 127)
+                     fs            = fsampling, 
+                     fstart        = 0, 
+                     fstop         = 3e6, 
+                     in_width      = 16, 
+                     coeff_width   = 21, 
+                     numofCoeffs   = 127)
+    
+    bpf = fir_module(fir_type      = "HPF",
+                     instance_name = "hpf", 
+                     fs            = fsampling, 
+                     fstart        = 3e6, 
+                     fstop         = -1, 
+                     in_width      = 16, 
+                     coeff_width   = 21, 
+                     numofCoeffs   = 127)
     
     wgen = wavegen(instance_name = "lo", 
-                   fs = fsampling, 
-                   freq = 100e3,
-                   init_phase = 0, 
-                   out_width = 16)
+                   fs            = fsampling, 
+                   freq          = 100e3,
+                   init_phase    = 0, 
+                   out_width     = 16)
 
-    mix = mixer(instance_name = "Mixer",
-                fs = fsampling,
-                signal_width = 16,
-                mixing_signal_width=16,
-                out_width = 16)
+    mix = mixer(instance_name       = "Mixer",
+                fs                  = fsampling,
+                signal_width        = 16,
+                mixing_signal_width = 16,
+                out_width           = 16)
 
-    in_gain = gain(instance_name="input",
-                   fs = fsampling,
-                   gain = 0.5)
+    in_gain = gain(instance_name = "input",
+                   fs            = fsampling,
+                   gain          = 1.5)
+    
+    in_gain2 = gain(instance_name = "input2",
+                   fs            = fsampling,
+                   gain          = 6.0)
     
 
     finalise_project()

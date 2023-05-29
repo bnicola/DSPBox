@@ -35,7 +35,7 @@ class wavegen:
         freq_requested = (2**32) * self.freq/self.fs
         initial_phase = (self.init_phase/360) * self.wave_table_size
         with open(proj_name() + "wavegen_" + self.instance_name + ".v", 'w') as f:
-            f.write("module wavegen #(\n")
+            f.write("module wavegen_" + self.instance_name + " #(\n")
             f.write("//------------------------------------------------------\n")
             f.write("//--				External Parameters	                       --\n")
             f.write("//------------------------------------------------------\n")
@@ -129,7 +129,7 @@ class wavegen:
         haf_clk_period = int(clk_period / 2)
         with open(proj_name() + "wavegen_" + self.instance_name + ".do", 'w') as f:
             f.write("project compileall\n")
-            f.write("vsim -gui work.wavegen -t ns\n")
+            f.write("vsim -gui work.wavegen_" + self.instance_name + " -t ns\n")
             f.write("restart -f\n")
             f.write("view structure\n")
             f.write("view wave\n\n")
@@ -176,10 +176,6 @@ class wavegen:
             f.write("run 200000\n")
             f.write("wave zoom full\n")
 
-
-    def raise_error(self, error):
-        line_no = traceback.extract_stack()[0].linno
-        raise ValueError(error + " at " + str(line_no))
 
 
     

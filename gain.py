@@ -31,7 +31,7 @@ class gain:
         scale = 2**(self.gain_q_width - 1)
         gain = int(math.ceil(self.gain * scale))
         with open(proj_name() + "gain_" + self.instance_name + ".v", 'w') as f:
-            f.write("module gain#\n")
+            f.write("module gain_" + self.instance_name + "#\n")
             f.write("(\n")
             f.write("    parameter integer IN_SIG_WIDTH    = " + str(self.signal_width) + ",\n")
             f.write("    parameter integer GAIN_INT_WIDTH  = " + str(self.gain_int_width) + ",\n")
@@ -91,7 +91,7 @@ class gain:
         haf_clk_period = int(clk_period / 2)
         with open(proj_name() + "gain_" + self.instance_name + ".do", 'w') as f:
             f.write("project compileall\n")
-            f.write("vsim -gui work.gain -t ns\n")
+            f.write("vsim -gui work.gain_" + self.instance_name + " -t ns\n")
             f.write("restart -f\n")
             f.write("view structure\n")
             f.write("view wave\n")
@@ -141,9 +141,6 @@ class gain:
         bits = math.ceil(math.log2(abs(number) + 1)) + 1
         return bits
 
-    def raise_error(self, error):
-        line_no = traceback.extract_stack()[0].linno
-        raise ValueError(error + " at " + str(line_no))
 
 
     

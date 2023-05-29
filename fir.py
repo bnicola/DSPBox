@@ -38,10 +38,17 @@ class fir_module:
         if self.numofCoeffs % 2 == 0:  # Check if the number of coeff is even(we need an odd number of coeffs)
             self.numofCoeffs = self.numofCoeffs + 1
 
-        # if (fir_type == 'HPF'):
-        #      self.fstop = self.fs/2
-        # elif (fir_type == 'LPF'):
-        #     self.start  = 0 
+        if (fir_type == 'HPF'):
+             self.fstop = self.fs/2
+        elif (fir_type == 'LPF'):
+             self.start  = 0 
+
+        if (fir_type == 'LPF' and self.fstart > 0):
+            self.raise_error(self, "LPF filters should not take an fstart bigger than 0")
+        if (fir_type == 'BPF' and self.fstart == 0):
+            self.raise_error(self, "BPF filters should not take an fstart equal to 0")
+        if (fir_type == 'HPF' and self.fstart <= 0):
+            self.raise_error(self, "HPF filters should not take an fstart equal to 0 or -1")
         
         self.generate()
         add_file_to_list("fir_" + self.instance_name + ".v")
@@ -72,7 +79,7 @@ class fir_module:
             hex_coeff_i = hex(fixed_coeff_i)
             hex_coeff.append(hex_coeff_i)
         with open(proj_name() + "fir_" + self.instance_name + ".v", 'w') as f:
-            f.write("module fir#\n")
+            f.write("module fir_" + self.instance_name + "#\n")
             f.write("(\n")
             f.write("//------------------------------------------------------\n")
             f.write("//--	             External Parameters	               --\n")
@@ -228,7 +235,7 @@ class fir_module:
         haf_clk_period = int(clk_period / 2)
         with open(proj_name() + "fir_" + self.instance_name + ".do", 'w') as f:
             f.write("project compileall\n")
-            f.write("vsim -gui work.fir -t ns\n")
+            f.write("vsim -gui work.fir_" + self.instance_name + " -t ns\n")
             f.write("restart -f\n")
             f.write("view structure\n")
             f.write("view wave\n")
@@ -276,9 +283,7 @@ class fir_module:
             f.write("run " + str(time + 5000) + "\n")
             f.write("wave zoom full\n")
 
-    def raise_error(self, error):
-        line_no = traceback.extract_stack()[0].linno
-        raise ValueError(error + " at " + str(line_no))
+    
 
 
     

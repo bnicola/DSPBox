@@ -34,7 +34,7 @@ class mixer:
     def generate(self):
         print("...generating Mixer with name " + self.instance_name + "...")
         with open(proj_name() + "mixer_" + self.instance_name + ".v", 'w') as f:
-            f.write("module mixer #\n")
+            f.write("module mixer_" + self.instance_name + " #\n")
             f.write("(\n")
             f.write("//------------------------------------------------------\n")
             f.write("//--	             External Parameters	           --\n")
@@ -122,7 +122,7 @@ class mixer:
         haf_clk_period = int(clk_period / 2)
         with open(proj_name() + "mixer_" + self.instance_name + ".do", 'w') as f:  
             f.write("project compileall\n")
-            f.write("vsim -gui work.mixer -t ns\n")
+            f.write("vsim -gui work.mixer_" + self.instance_name + " -t ns\n")
             f.write("restart -f\n")
             f.write("view structure\n")
             f.write("view wave\n\n")
@@ -158,10 +158,6 @@ class mixer:
             f.write("configure wave -childrowmargin 2 \n")
             f.write("run 36000\n")
             f.write("wave zoom full\n")
-
-    def raise_error(self, error):
-        line_no = traceback.extract_stack()[0].linno
-        raise ValueError(error + " at " + str(line_no))
 
 
     
