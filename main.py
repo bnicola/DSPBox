@@ -7,7 +7,8 @@ from fir     import fir_module
 from wavegen import wavegen
 from mixer   import mixer
 from gain    import gain
-from gain_c    import gain_c
+from gain_c  import gain_c
+from diff    import diff
 
 def main():
     parser = argparse.ArgumentParser(description='Command Line Argument')
@@ -30,13 +31,13 @@ def main():
     bpf = fir_module(fir_type      = "BPF",
                      instance_name = "bpf", 
                      fs            = fsampling, 
-                     fstart        = 4e6, 
-                     fstop         = 7e6, 
+                     fstart        = 2e6, 
+                     fstop         = 4e6, 
                      in_width      = 16, 
                      coeff_width   = 21, 
                      numofCoeffs   = 127)
 
-    bpf = fir_module(fir_type      = "LPF",
+    lpf = fir_module(fir_type      = "LPF",
                      instance_name = "lpf", 
                      fs            = fsampling, 
                      fstart        = 0, 
@@ -45,7 +46,7 @@ def main():
                      coeff_width   = 21, 
                      numofCoeffs   = 127)
     
-    bpf = fir_module(fir_type      = "HPF",
+    hpf = fir_module(fir_type      = "HPF",
                      instance_name = "hpf", 
                      fs            = fsampling, 
                      fstart        = 3e6, 
@@ -73,6 +74,10 @@ def main():
     in_gain2 = gain_c(instance_name = "input2",
                       fs            = fsampling
                       )
+    
+    d = diff (instance_name = "hp",
+                fs             = fsampling
+                )
     
 
     finalise_project()
