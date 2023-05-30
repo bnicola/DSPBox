@@ -32,6 +32,7 @@ def set_proj_name(proj_name):
 
     shutil.copy2("dsp_proj.mpf", curr_proj_path)
     shutil.copy2("nco.v", curr_proj_path)
+    shutil.copy2("function_gen.v", curr_proj_path)
     
 
 def proj_name():
@@ -52,11 +53,13 @@ def modify_proj_file(proj_path, proj_filename, verilog_files_list):
             break
     
     if found_target:
-        lines[i+1] = 'Project_Files_Count = ' + str(len(verilog_files_list) + 1) + '\n'
+        lines[i+1] = 'Project_Files_Count = ' + str(len(verilog_files_list) + 2) + '\n'
         lines.insert(i+2, 'Project_File_0 = ' + proj_path +'/nco.v\n')
         lines.insert(i+3, 'Project_File_P_0 = cover_toggle 0 file_type verilog group_id 0 cover_exttoggle 0 cover_nofec 0 cover_cond 0 vlog_1995compat 0 vlog_nodebug 0 last_compile 1685062041 cover_fsm 0 cover_branch 0 vlog_noload 0 folder {Top Level} cover_excludedefault 0 vlog_enable0In 0 vlog_disableopt 0 cover_covercells 0 voptflow 1 vlog_showsource 0 vlog_hazard 0 cover_optlevel 3 toggle - vlog_0InOptions {} ood 1 cover_noshort 0 vlog_upper 0 compile_to work vlog_options {} compile_order 0 cover_expr 0 dont_compile 0 cover_stmt 0\n')
-        index = 4
-        filex = 1
+        lines.insert(i+4, 'Project_File_1 = ' + proj_path +'/function_gen.v\n')
+        lines.insert(i+5, 'Project_File_P_1 = cover_toggle 0 file_type verilog group_id 0 cover_exttoggle 0 cover_nofec 0 cover_cond 0 vlog_1995compat 0 vlog_nodebug 0 last_compile 1685062041 cover_fsm 0 cover_branch 0 vlog_noload 0 folder {Top Level} cover_excludedefault 0 vlog_enable0In 0 vlog_disableopt 0 cover_covercells 0 voptflow 1 vlog_showsource 0 vlog_hazard 0 cover_optlevel 3 toggle - vlog_0InOptions {} ood 1 cover_noshort 0 vlog_upper 0 compile_to work vlog_options {} compile_order 0 cover_expr 0 dont_compile 0 cover_stmt 0\n')
+        index = 6
+        filex = 2
         for module in verilog_files_list:
             lines.insert(i+index, 'Project_File_' + str(filex) + '= ' + proj_path + '/' + module + '\n')
             index += 1

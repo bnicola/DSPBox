@@ -9,6 +9,7 @@ from mixer   import mixer
 from gain    import gain
 from gain_c  import gain_c
 from diff    import diff
+from fm_modulator import fm_modulator
 
 def main():
     parser = argparse.ArgumentParser(description='Command Line Argument')
@@ -76,8 +77,12 @@ def main():
                       )
     
     d = diff (instance_name = "hp",
-                fs             = fsampling
-                )
+              fs            = fsampling
+             )
+    fm_m = fm_modulator(instance_name="test",
+                        fs = fsampling,
+                        modulating_min_freq=5000,
+                        modulating_max_freq=1000000)
     
 
     finalise_project()
