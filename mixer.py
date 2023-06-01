@@ -54,13 +54,9 @@ class mixer:
             f.write(");\n\n")
             f.write("    reg signed [SIGNAL_WIDTH + MIXING_SIGNAL_WIDTH - 1: 0] mult;\n")
 
-            f.write("    wire signed [SIGNAL_WIDTH - 1:0] f1_sine;\n")
-            f.write("    wire signed [SIGNAL_WIDTH - 1:0] f1_cos;\n")
-            f.write("    wire signed [SIGNAL_WIDTH - 1:0] f1_scaled_sine_out;\n")
+            f.write("    wire signed [SIGNAL_WIDTH - 1:0] lo_signal;\n")
 
-            f.write("    wire signed [MIXING_SIGNAL_WIDTH - 1:0] f2_sine;\n")
-            f.write("    wire signed [MIXING_SIGNAL_WIDTH - 1:0] f2_cos;\n")
-            f.write("    wire signed [MIXING_SIGNAL_WIDTH - 1:0] f2_scaled_sine_out;\n\n")
+            f.write("    wire signed [MIXING_SIGNAL_WIDTH - 1:0] modulating_signal;\n")
             
             if (debug()):
                 f.write("    wire [31:0] f1;\n")
@@ -72,9 +68,9 @@ class mixer:
                 f.write("    .freq_in(f1),\n")
                 f.write("    .scale_factor(8190), \n")
                 f.write("    .phase(0), \n")
-                f.write("    .sine_out(f1_sine), \n")
-                f.write("    .cos_out(f1_cos),\n")
-                f.write("    .scaled_sine_out(f1_scaled_sine_out)\n")
+                f.write("    .sine_out(lo_signal), \n")
+                f.write("    .cos_out(),\n")
+                f.write("    .scaled_sine_out()\n")
                 f.write("    );\n\n\n")
 
 
@@ -84,9 +80,9 @@ class mixer:
                 f.write("    .freq_in(f2),\n")
                 f.write("    .scale_factor(8190), \n")
                 f.write("    .phase(0), \n")
-                f.write("    .sine_out(f2_sine), \n")
-                f.write("    .cos_out(f2_cos),\n")
-                f.write("    .scaled_sine_out(f2_scaled_sine_out)\n")
+                f.write("    .sine_out(modulating_signal), \n")
+                f.write("    .cos_out(),\n")
+                f.write("    .scaled_sine_out()\n")
                 f.write("    );\n\n")
 
                 f.write("    always @(posedge clk) begin \n")
@@ -94,7 +90,7 @@ class mixer:
                 f.write("            mult <= 0;\n")
                 f.write("        end\n")
                 f.write("        else begin \n")
-                f.write("            mult <= f1_sine * f2_sine; //sig * lo;\n")
+                f.write("            mult <= lo_signal * modulating_signal; //sig * lo;\n")
                 f.write("        end\n")
                 f.write("    end\n\n")
                 f.write("    assign mixed = mult >> (SIGNAL_WIDTH + MIXING_SIGNAL_WIDTH - OUTOUT_SIGNAL_WIDTH - 1);//mult[SIGNAL_WIDTH + MIXING_SIGNAL_WIDTH - 1 : SIGNAL_WIDTH + MIXING_SIGNAL_WIDTH - OUTOUT_SIGNAL_WIDTH + 1];\n\n")
@@ -131,8 +127,8 @@ class mixer:
             f.write("add wave -noupdate -expand  -group mixer\n")
             f.write("add wave -noupdate -group mixer -radix hex {clk}\n")
             f.write("add wave -noupdate -group mixer -radix hex {rst}\n")
-            f.write("add wave -noupdate -group mixer -color \"yellow\" -format analog-step -height 200 -max 32768 -min -32768 -radix dec {f1_sine}\n")
-            f.write("add wave -noupdate -group mixer -color \"magenta\" -format analog-step -height 200 -max 32768 -min -32768 -radix dec {f2_sine}\n")
+            f.write("add wave -noupdate -group mixer -color \"yellow\" -format analog-step -height 200 -max 32768 -min -32768 -radix dec {lo_signal}\n")
+            f.write("add wave -noupdate -group mixer -color \"magenta\" -format analog-step -height 200 -max 32768 -min -32768 -radix dec {modulating_signal}\n")
             f.write("add wave -noupdate -group mixer -color \"magenta\" -format analog-step -height 200 -max 32768 -min -32768 -radix dec {mixed}\n\n")
            
             f.write("force -freeze clk 1 0, 0 {" + str(haf_clk_period) +  " ns} -r " + str(clk_period) + "\n")

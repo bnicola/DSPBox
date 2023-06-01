@@ -50,8 +50,8 @@ class fm_modulator:
             f.write("    input signed [IN_SIG_WIDTH - 1:0] signal_in,\n")
             f.write("    output reg signed [RESULT_WIDTH - 1:0] result\n")
             f.write(");\n\n")
-
-            f.write("wire signed [IN_SIG_WIDTH - 1:0] modulating_sig;\n")
+            if(debug()):
+                f.write("wire signed [IN_SIG_WIDTH - 1:0] modulating_sig;\n")
             f.write("wire signed [IN_SIG_WIDTH - 1:0] modulated_sig;\n\n")
 
             f.write("reg [31:0] scaled_freq;\n")

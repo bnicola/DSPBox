@@ -72,6 +72,8 @@ class diff:
                 f.write("    assign signal_out = $signed(signal_in - delay);\n\n")
             
             f.write("endmodule\n")
+
+            print("Done generating DIFF " + "dif_" + self.instance_name + ".v\n")
     
     def unit_test(self):
         MHz = 1000000
