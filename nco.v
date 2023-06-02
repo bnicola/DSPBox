@@ -4,7 +4,7 @@ module nco #(
    //--				External Parameters	                       --
    //------------------------------------------------------
    parameter integer WAVE_WIDTH       = 16,         // Our wave signal bit width
-   parameter integer LOOKUP_TBL_SIZE  = 1024,       // Our waveform lookup table size
+   parameter integer LOOKUP_TBL_SIZE  = 128,       // Our waveform lookup table size
    parameter integer SCALE_INT_WIDTH  = 2,          // 1 bit integer as we only have a gain 0.0 --> 1.0
    parameter integer SCALE_Q_WIDTH    = 14,         // 15 bit fraction
    parameter integer OUTPUT_WIDTH     = WAVE_WIDTH  // Output width

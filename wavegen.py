@@ -6,7 +6,7 @@ from  project_dsp import  *
 
 class wavegen:
 
-    def __init__(self, instance_name, fs, freq, out_width, init_phase = 0, wave_table_size=1024):
+    def __init__(self, instance_name, fs, freq, out_width, init_phase = 0, wave_table_size=128):
         
         if instance_name is None:
             self.raise_error(self, "Missing instance_name in module")

@@ -32,6 +32,7 @@ def set_proj_name(proj_name):
 
     shutil.copy2("dsp_proj.mpf", curr_proj_path)
     shutil.copy2("nco.v", curr_proj_path)
+    shutil.copy2("nco.do", curr_proj_path)
     shutil.copy2("function_gen.v", curr_proj_path)
     
 
