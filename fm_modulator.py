@@ -1,7 +1,7 @@
 
 import traceback
 import math
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import numpy as np
 from  project_dsp import  *
 
@@ -113,8 +113,10 @@ class fm_modulator:
             f.write("    .scaled_sine_out()\n")
             f.write(");\n\n")
 
-            f.write("assign result = $signed(modulated_sig);\n")
-            
+            #f.write("assign result = $signed(modulated_sig);\n")
+            f.write("always @(posedge clk or posedge rst) begin\n")
+            f.write("   result = $signed(modulated_sig);\n")
+            f.write("end\n")
             f.write("endmodule\n")
 
 
@@ -128,7 +130,7 @@ class fm_modulator:
         haf_clk_period = int(clk_period / 2)
         with open(proj_name() + "fm_modulator_" + self.instance_name + ".do", 'w') as f:
             f.write("project compileall\n")
-            f.write("vsim -gui work.fm_modulator_" + self.instance_name + " -t ns\n")
+            f.write("vsim -gui work.fm_modulator_" + self.instance_name + " -t ns -voptargs=\"+acc\"\n")
             f.write("restart -f\n")
             f.write("view structure\n")
             f.write("view wave\n\n")

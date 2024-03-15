@@ -20,7 +20,7 @@ module nco #(
   input             [12:0]                                  phase,          // intial phase
   output reg signed [WAVE_WIDTH - 1:0]                      sine_out,       // sine output
   output reg signed [WAVE_WIDTH - 1:0]                      cos_out,        // cos output
-  output reg signed [WAVE_WIDTH - 1:0]    scaled_sine_out // scaled sine output
+  output reg signed [WAVE_WIDTH - 1:0]                      scaled_sine_out // scaled sine output
 );
 
 parameter lookup_bits = $clog2(LOOKUP_TBL_SIZE);
@@ -36,10 +36,6 @@ reg signed [WAVE_WIDTH + SCALE_INT_WIDTH + SCALE_Q_WIDTH:0] scaled_wave;
 reg [lookup_bits:0] initial_phase;
 
 wire [lookup_bits - 1:0] current_phase;
-
-// Our Scaled output
-assign scaled_wave = $signed(sine_out) * $signed(scale_factor) >>> (SCALE_Q_WIDTH);
-assign scaled_sine_out = $signed(scaled_wave[OUTPUT_WIDTH - 1: 0]);
 
 // Generate sine lookup table
 integer i;
@@ -83,6 +79,12 @@ assign current_phase = phase_accumulator[31:32-lookup_bits] + initial_phase;
 
 always @ (posedge clk) begin
   sine_out <= sine_lut[current_phase];
+  cos_out <= cos_lut[current_phase];
+end
+
+always @ (posedge clk) begin
+  scaled_wave <= $signed(sine_out) * $signed(scale_factor) >>> (SCALE_Q_WIDTH);
+  scaled_sine_out = $signed(scaled_wave[OUTPUT_WIDTH - 1: 0]);
   cos_out <= cos_lut[current_phase];
 end
 

@@ -1,5 +1,5 @@
 project compileall
-vsim -gui work.nco -t ns
+vsim -gui work.nco -t ns -voptargs="+acc"
 restart -f
 view structure
 view wave

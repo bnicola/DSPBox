@@ -1,6 +1,6 @@
 import traceback
 import math
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import numpy as np
 from  project_dsp import  *
 
@@ -72,12 +72,6 @@ class wavegen:
             f.write("\n")
             f.write("    wire [lookup_bits - 1:0] current_phase;\n")
             f.write("\n")
-            f.write("    // Our Scaled output\n")
-            f.write("    assign scaled_wave = $signed(sine_out) * $signed(scale_factor) >>> (SCALE_Q_WIDTH);\n")
-            f.write("    assign scaled_sine_out = $signed(scaled_wave[OUTPUT_WIDTH - 1: 0]);\n")
-            f.write("\n")
-            f.write("    assign scaled_wave_90 = $signed(cos_out) * $signed(scale_factor) >>> (SCALE_Q_WIDTH);\n")
-            f.write("    assign scaled_cos_out =  $signed(scaled_wave_90[OUTPUT_WIDTH - 1: 0]);\n")
             f.write("    // Generate sine lookup table\n")
             f.write("    integer i;\n")
             f.write("    initial begin\n")
@@ -122,9 +116,18 @@ class wavegen:
             f.write("        sine_out <= sine_lut[current_phase];\n")
             f.write("        cos_out  <= cos_lut[current_phase];\n")
             f.write("    end\n\n")
+
+            f.write("    // Our Scaled output\n")
+            f.write("    always @ (posedge clk) begin\n")
+            f.write("       scaled_wave <= $signed(sine_out) * $signed(scale_factor) >>> (SCALE_Q_WIDTH);\n")
+            f.write("       scaled_sine_out <= $signed(scaled_wave[OUTPUT_WIDTH - 1: 0]);\n")
+            f.write("    end\n\n")
+            f.write("    always @ (posedge clk) begin\n")
+            f.write("       scaled_wave_90 <= $signed(cos_out) * $signed(scale_factor) >>> (SCALE_Q_WIDTH);\n")
+            f.write("       scaled_cos_out <=  $signed(scaled_wave_90[OUTPUT_WIDTH - 1: 0]);\n")
+            f.write("    end\n")
             f.write("endmodule\n")
-
-
+            
             print("Done generating WAVEGEN " + "wavegen_" + self.instance_name + ".v\n")
 
     
@@ -135,7 +138,7 @@ class wavegen:
         haf_clk_period = int(clk_period / 2)
         with open(proj_name() + "wavegen_" + self.instance_name + ".do", 'w') as f:
             f.write("project compileall\n")
-            f.write("vsim -gui work.wavegen_" + self.instance_name + " -t ns\n")
+            f.write("vsim -gui work.wavegen_" + self.instance_name + " -t ns -voptargs=\"+acc\"\n")
             f.write("restart -f\n")
             f.write("view structure\n")
             f.write("view wave\n\n")

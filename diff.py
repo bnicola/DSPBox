@@ -1,6 +1,6 @@
 import traceback
 import math
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import numpy as np
 from  project_dsp import  *
 
@@ -48,8 +48,8 @@ class diff:
                 f.write("        .clk(clk), \n")
                 f.write("        .rst(rst), \n")
                 f.write("        .freq_in(f1),\n")
-                f.write("        .scale_factor(8190), \n")
-                f.write("        .phase(0),\n") 
+                f.write("        .scale_factor(16'd8190), \n")
+                f.write("        .phase(13'd0),\n") 
                 f.write("        .sine_out(f1_sine), \n")
                 f.write("        .cos_out(f1_cos),\n")
                 f.write("        .scaled_sine_out(f1_scaled_sine_out)\n")
@@ -67,9 +67,15 @@ class diff:
             f.write("        end\n")
             f.write("end\n\n")
             if(debug()):
-                f.write("    assign signal_out = $signed(f1_cos - delay);\n\n")
+                f.write("    always @(posedge clk , posedge rst) begin\n")
+                f.write("       signal_out = $signed(f1_cos - delay);\n")
+                f.write("    end\n")
+                #f.write("    assign signal_out = $signed(f1_cos - delay);\n\n")
             else:
-                f.write("    assign signal_out = $signed(signal_in - delay);\n\n")
+                f.write("    always @(posedge clk , posedge rst) begin\n")
+                f.write("       signal_out = $signed(signal_in - delay);\n")
+                f.write("    end\n")
+                #f.write("    assign signal_out = $signed(signal_in - delay);\n\n")
             
             f.write("endmodule\n")
 
@@ -82,7 +88,7 @@ class diff:
         haf_clk_period = int(clk_period / 2)
         with open(proj_name() + "diff_" + self.instance_name + ".do", 'w') as f:
             f.write("project compileall\n")
-            f.write("vsim -gui work.diff_" + self.instance_name + " -t ns\n")
+            f.write("vsim -gui work.diff_" + self.instance_name + " -t ns -voptargs=\"+acc\"\n")
             f.write("restart -f\n")
             f.write("view structure\n")
             f.write("view wave\n\n")

@@ -1,6 +1,6 @@
 import traceback
 import math
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import numpy as np
 from  project_dsp import  *
 
@@ -52,7 +52,7 @@ class gain_c:
                 f.write("        .clk(clk), \n")
                 f.write("        .rst(rst),\n") 
                 f.write("        .freq_in(f1),\n")
-                f.write("        .scale_factor(8190),\n") 
+                f.write("        .scale_factor(16'd8190),\n") 
                 f.write("        .phase(0), \n")
                 f.write("        .sine_out(f1_sine),\n") 
                 f.write("        .cos_out(f1_cos),\n")
@@ -72,7 +72,10 @@ class gain_c:
             f.write("        end\n")
             f.write("    end\n")
             f.write("\n")
-            f.write("    assign result = (product >>> GAIN_Q_WIDTH - 1);\n")
+            f.write("    always @(posedge clk , posedge rst) begin\n")
+            f.write("       result <= (product >>> GAIN_Q_WIDTH - 1);\n")
+            f.write("    end\n")
+            #f.write("    assign result = (product >>> GAIN_Q_WIDTH - 1);\n")
             f.write("\n")
             f.write("endmodule\n")
 
@@ -86,7 +89,7 @@ class gain_c:
         haf_clk_period = int(clk_period / 2)
         with open(proj_name() + "gain_c_" + self.instance_name + ".do", 'w') as f:
             f.write("project compileall\n")
-            f.write("vsim -gui work.gain_c_" + self.instance_name + " -t ns\n")
+            f.write("vsim -gui work.gain_c_" + self.instance_name + " -t ns -voptargs=\"+acc\"\n")
             f.write("restart -f\n")
             f.write("view structure\n")
             f.write("view wave\n")

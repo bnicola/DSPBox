@@ -1,6 +1,6 @@
 import traceback
 import math
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import numpy as np
 from  project_dsp import  *
 
@@ -123,8 +123,8 @@ class fir_module:
                 f.write("    .clk(clk), \n")
                 f.write("    .rst(reset),\n") 
                 f.write("    .freq_in(f1),\n")
-                f.write("    .scale_factor(14745), \n")
-                f.write("    .phase(0), \n")
+                f.write("    .scale_factor(16'd14745), \n")
+                f.write("    .phase(13'd0), \n")
                 f.write("    .sine_out(f1_sine),\n")
                 f.write("    .cos_out(f1_cos),\n")
                 f.write("    .scaled_sine_out(f1_scaled_sine_out)\n")
@@ -154,8 +154,10 @@ class fir_module:
                 for i in range (1, len(hex_coeff)):
                     f.write("    assign accum[" + str(i) + "] = (($signed(coeffs[" + str(i) + "]) * $signed(sig_in)) >>> (COEFF_WIDTH - 1)) + delay_line[" + str(i - 1) + "];\n")
                     accum_index = i
-
-            f.write("    assign sig_out = accum[" + str(accum_index) + "];\n")
+            f.write("    always @(posedge clk, posedge reset) begin\n")
+            f.write("       sig_out = accum[126];\n")
+            f.write("    end\n")
+            #f.write("    assign sig_out = accum[" + str(accum_index) + "];\n")
             f.write(" \n")   
             f.write("endmodule\n")
 
@@ -235,7 +237,7 @@ class fir_module:
         haf_clk_period = int(clk_period / 2)
         with open(proj_name() + "fir_" + self.instance_name + ".do", 'w') as f:
             f.write("project compileall\n")
-            f.write("vsim -gui work.fir_" + self.instance_name + " -t ns\n")
+            f.write("vsim -gui work.fir_" + self.instance_name + " -t ns -voptargs=\"+acc\"\n")
             f.write("restart -f\n")
             f.write("view structure\n")
             f.write("view wave\n")
