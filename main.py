@@ -16,7 +16,7 @@ def main():
 
     # Add arguments
     parser.add_argument('-d', '--debugging', type=str_to_bool, default = True, help='Debug generation(used to generate modules that can be debugged)')
-    parser.add_argument('-p', '--project', type=str, default = "DSP_Project2", help='Specify project name')
+    parser.add_argument('-p', '--project', type=str, default = "DSP_Project", help='Specify project name')
 
     # Parse the command line arguments
     args = parser.parse_args()
